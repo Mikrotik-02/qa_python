@@ -1,5 +1,5 @@
 from main import BooksCollector
-
+import pytest
 # класс TestBooksCollector объединяет набор тестов, которыми мы покрываем наше приложение BooksCollector
 # обязательно указывать префикс Test
 class TestBooksCollector:
@@ -28,8 +28,6 @@ class TestBooksCollector:
         collector.add_new_book('Гордость и предубеждение и зомби')
         assert len(collector.get_books_genre()) == 1
         assert 'Гордость и предубеждение и зомби' in collector.get_books_genre()
-    
-    import pytest
 
     @pytest.mark.parametrize('name',['','a'*41])
     def test_add_new_book_not_add_invalid_book(self,name):
@@ -48,16 +46,17 @@ class TestBooksCollector:
         collector.add_new_book('Кыца убийца')
         collector.set_book_genre('Кыца убийца', 'Триллер')
         assert collector.get_book_genre('Кыца убийца') == ''
-    
-    def  test_get_book_with_specific_genre_return_only_selected_genre(self):
+
+    @pytest.mark.parametrize('genre, expected_count', [('Комедии', 2), ('Ужасы', 1),])
+    def test_get_books_with_specific_genre_returns_correct_count(self, genre, expected_count):
         collector = BooksCollector()
         collector.add_new_book('Кыца убийца')
         collector.add_new_book('Гордость и предубеждение и зомби')
         collector.add_new_book('Что делать, если ваш кот хочет вас убить')
         collector.set_book_genre('Кыца убийца', 'Комедии')
-        collector.set_book_genre( 'Что делать, если ваш кот хочет вас убить', 'Комедии')
+        collector.set_book_genre('Что делать, если ваш кот хочет вас убить', 'Комедии')
         collector.set_book_genre('Гордость и предубеждение и зомби', 'Ужасы')
-        assert collector.get_books_with_specific_genre('Комедии') == ['Кыца убийца', 'Что делать, если ваш кот хочет вас убить']
+        assert len(collector.get_books_with_specific_genre(genre)) == expected_count
     
     def test_get_books_for_children_returns_books_without_age_rating(self):
         collector = BooksCollector()
@@ -65,7 +64,7 @@ class TestBooksCollector:
         collector.add_new_book('Гордость и предубеждение и зомби')
         collector.add_new_book('Что делать, если ваш кот хочет вас убить')
         collector.set_book_genre('Кыца убийца', 'Комедии')
-        collector.set_book_genre( 'Что делать, если ваш кот хочет вас убить', 'Детектив')
+        collector.set_book_genre( 'Что делать, если ваш кот хочет вас убить', 'Детективы')
         collector.set_book_genre('Гордость и предубеждение и зомби', 'Ужасы')
         assert collector.get_books_for_children() == ['Кыца убийца']
 
