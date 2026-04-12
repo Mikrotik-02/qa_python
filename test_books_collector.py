@@ -29,8 +29,16 @@ class TestBooksCollector:
         assert len(collector.get_books_genre()) == 1
         assert 'Гордость и предубеждение и зомби' in collector.get_books_genre()
     
+    import pytest
+
     @pytest.mark.parametrize('name',['','a'*41])
     def test_add_new_book_not_add_invalid_book(self,name):
         collector = BooksCollector()
         collector.add_new_book(name)
-        assert len(collector.get_book_genre()) == 0
+        assert len(collector.get_books_genre()) == 0
+    
+    def test_set_book_genre_genre_set_for_book(self):
+        collector = BooksCollector()
+        collector.add_new_book('Кыца убийца')
+        collector.set_book_genre('Кыца убийца', 'Комедии')
+        assert collector.get_book_genre('Кыца убийца') == 'Комедии'
