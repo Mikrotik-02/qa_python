@@ -42,3 +42,10 @@ class TestBooksCollector:
         collector.add_new_book('Кыца убийца')
         collector.set_book_genre('Кыца убийца', 'Комедии')
         assert collector.get_book_genre('Кыца убийца') == 'Комедии'
+    
+    def test_set_book_genre_not_set_invalid_genre(self):
+        collector = BooksCollector()
+        collector.add_new_book('Кыца убийца')
+        collector.set_book_genre('Кыца убийца', 'Триллер')
+        assert collector.get_book_genre('Кыца убийца') == ''
+    
