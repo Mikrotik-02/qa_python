@@ -49,3 +49,12 @@ class TestBooksCollector:
         collector.set_book_genre('Кыца убийца', 'Триллер')
         assert collector.get_book_genre('Кыца убийца') == ''
     
+    def  test_get_book_with_specific_genre_return_only_selected_genre(self):
+        collector = BooksCollector()
+        collector.add_new_book('Кыца убийца')
+        collector.add_new_book('Гордость и предубеждение и зомби')
+        collector.add_new_book('Что делать, если ваш кот хочет вас убить')
+        collector.set_book_genre('Кыца убийца', 'Комедии')
+        collector.set_book_genre( 'Что делать, если ваш кот хочет вас убить', 'Комедии')
+        collector.set_book_genre('Гордость и предубеждение и зомби', 'Ужасы')
+        assert collector.get_books_with_specific_genre('Комедии') == ['Кыца убийца', 'Что делать, если ваш кот хочет вас убить']
