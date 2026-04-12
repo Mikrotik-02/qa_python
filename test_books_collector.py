@@ -58,3 +58,13 @@ class TestBooksCollector:
         collector.set_book_genre( 'Что делать, если ваш кот хочет вас убить', 'Комедии')
         collector.set_book_genre('Гордость и предубеждение и зомби', 'Ужасы')
         assert collector.get_books_with_specific_genre('Комедии') == ['Кыца убийца', 'Что делать, если ваш кот хочет вас убить']
+    
+    def test_get_book_for_children_return_only_not_age_rating_books(self):
+        collector = BooksCollector()
+        collector.add_new_book('Кыца убийца')
+        collector.add_new_book('Гордость и предубеждение и зомби')
+        collector.add_new_book('Что делать, если ваш кот хочет вас убить')
+        collector.set_book_genre('Кыца убийца', 'Комедии')
+        collector.set_book_genre( 'Что делать, если ваш кот хочет вас убить', 'Детектив')
+        collector.set_book_genre('Гордость и предубеждение и зомби', 'Ужасы')
+        assert collector.get_books_for_children() == ['Кыца убийца']
