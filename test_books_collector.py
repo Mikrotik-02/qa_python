@@ -59,7 +59,7 @@ class TestBooksCollector:
         collector.set_book_genre('Гордость и предубеждение и зомби', 'Ужасы')
         assert collector.get_books_with_specific_genre('Комедии') == ['Кыца убийца', 'Что делать, если ваш кот хочет вас убить']
     
-    def test_get_book_for_children_return_only_not_age_rating_books(self):
+    def test_get_books_for_children_returns_books_without_age_rating(self):
         collector = BooksCollector()
         collector.add_new_book('Кыца убийца')
         collector.add_new_book('Гордость и предубеждение и зомби')
@@ -68,3 +68,41 @@ class TestBooksCollector:
         collector.set_book_genre( 'Что делать, если ваш кот хочет вас убить', 'Детектив')
         collector.set_book_genre('Гордость и предубеждение и зомби', 'Ужасы')
         assert collector.get_books_for_children() == ['Кыца убийца']
+
+    def test_add_book_in_favorites_add_two_favorite_books(self):
+        collector = BooksCollector()
+        collector.add_new_book('Кыца убийца')
+        collector.add_new_book('Гордость и предубеждение и зомби')
+        collector.add_book_in_favorites('Кыца убийца')
+        collector.add_book_in_favorites('Гордость и предубеждение и зомби')
+        result = collector.get_list_of_favorites_books()
+
+        assert len(result) == 2
+        assert 'Кыца убийца' in result
+        assert 'Гордость и предубеждение и зомби' in result
+
+    def test_add_book_in_favorites_not_add_duplicate_book(self):
+        collector = BooksCollector()
+        collector.add_new_book('Кыца убийца')
+        collector.add_new_book('Кыца убийца')
+        collector.add_book_in_favorites('Кыца убийца')
+        assert len(collector.get_list_of_favorites_books()) == 1
+    
+    def test_add_book_in_favorites_not_add_book_not_in_book_genre(self):
+        collector = BooksCollector()
+        collector.add_book_in_favorites('Кыца убийца')
+        assert collector.get_list_of_favorites_books() == []
+
+    def test_delete_book_from_favorites_delete_book(self):
+        collector = BooksCollector()
+        collector.add_new_book('Кыца убийца')
+        collector.add_book_in_favorites('Кыца убийца')
+        collector.delete_book_from_favorites('Кыца убийца')
+        assert collector.get_list_of_favorites_books() == []
+
+    def test_delete_book_from_favorites_not_delete_invalid_book(self):
+        collector = BooksCollector()
+        collector.add_new_book('Кыца убийца')
+        collector.add_book_in_favorites('Кыца убийца')
+        collector.delete_book_from_favorites('Что делать, если ваш кот хочет вас убить')
+        assert collector.get_list_of_favorites_books() == ['Кыца убийца']
