@@ -22,9 +22,15 @@ class TestBooksCollector:
 
     # напиши свои тесты ниже
     # чтобы тесты были независимыми в каждом из них создавай отдельный экземпляр класса BooksCollector()
-    def test_add_new_book_add_same_book(self):
+    def test_add_new_book_does_not_add_duplicate(self):
         collector = BooksCollector()
         collector.add_new_book('Гордость и предубеждение и зомби')
         collector.add_new_book('Гордость и предубеждение и зомби')
         assert len(collector.get_books_genre()) == 1
         assert 'Гордость и предубеждение и зомби' in collector.get_books_genre()
+    
+    @pytest.mark.parametrize('name',['','a'*41])
+    def test_add_new_book_not_add_invalid_book(self,name):
+        collector = BooksCollector()
+        collector.add_new_book(name)
+        assert len(collector.get_book_genre()) == 0
